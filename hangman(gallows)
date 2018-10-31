@@ -1,0 +1,50 @@
+print('Your task to guess cipher word. You have 3 lifes.\n\n') #1
+
+import random #2
+import sys #3
+
+def gallows(intro): #4, #7 after calling function: gallows
+    if intro == 's': #8
+        print('You must input letter. If the letter is in the word - it will be reflected in the scoreboard. Else you miss one life. Hint: all the hidden words are the names of computer games.\n') #9    
+        lst_of_words = ['fallout','disciples','thief','stellaris','divinity','caesar','bioshock'] #10
+        word = random.choice(lst_of_words) #11 Choosing a random word to guess
+        def gallows_guessing(word): #12, #14 after calling function: gallows_guessing
+            health = 3 #15 Count of attempts
+            word_interactive = '*'*len(word) #16
+            print(word_interactive) #17
+            while word_interactive != word: #18
+                user_input = input('\nInput letter: ') #19
+                if len(user_input) == 1: #20
+                    if user_input in word: #21
+                        index_detect = -1 #22
+                        for i in word: #23, n                 
+                            index_detect += 1 #24
+                            if i == user_input: #25
+                                word_interactive = list(word_interactive) #26
+                                word_interactive[index_detect] = user_input #27
+                                word_interactive = ''.join(word_interactive) #28
+                        print('There is such a letter!\n', word_interactive)#n1
+                        if word_interactive == word:#n2
+                            print("Congratulations! You win!")#n3
+                        
+            
+                    else:
+                        health -= 1
+                        print('Ohhh...you mistake! Attempts left:',health)
+                        if health <= 0:
+                            print('Dude, you lose.')
+                            break
+                          
+            
+                else:          
+                    print('Error! Input 1 letter')
+                    user_input = ''
+    else:
+        print('Goodbay')
+        sys.exit()
+                                     
+    gallows_guessing(word)#13 Calling function: gallows_guessing
+        
+intro = input("If you wish start game, press 's'. If you wish escape, press 'any key'.\n")#5 Greetings string
+
+gallows(intro)#6 Calling function: gallows
