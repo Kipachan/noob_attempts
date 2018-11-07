@@ -1,0 +1,68 @@
+import random
+
+#Empty cell:
+player_marker = 'X'
+
+#All actions available to the player:
+allowed_actions = {'w':-4,'s':4,'a':-1,'d':1}
+
+#Check and make changes to the playing field:
+def possible_steps(board,key):
+    current_position = board.index(player_marker)
+    if key == 'w' and current_position < 4:
+        raise IndexError("Can't move up")
+    if key == 's' and current_position > 11:
+        raise IndexError("Can't move down")
+    if key == 'a' and current_position % 4 == 0:
+        raise IndexError("Can't move left")
+    if key == 'd' and current_position % 4 == 3:
+        raise IndexError("Can't move right")
+    
+    delta = allowed_actions[key]
+    board[current_position],board[current_position + delta] = board[current_position + delta], board[current_position]
+    return board
+
+#Creation of the board and randomization of cells:
+def create_board():
+    board = list(range(1,17))
+    board[-1] = player_marker
+    possible_shakes = list(allowed_actions.keys())
+    for shake in range(100):
+        shake = random.choice(possible_shakes)
+        try:
+            board = possible_steps(board,shake)
+        except IndexError:
+            continue
+    return board
+
+#Print board:
+def print_board(board):
+    for i in range(0,16,4):
+        print (board[i:i+4])
+    print('\n')
+    
+#Player's steps:
+def player():
+    while True:
+        player_move = input("Make your move. Input 'w','s','a' or 'd': ")
+        if player_move in allowed_actions:
+            return player_move
+
+#Condition of the victory:
+def victory(board):
+    ideal_board = list(range(1,17))
+    ideal_board[-1] = player_marker
+    return ideal_board == board
+        
+def main():
+    board = create_board()
+    while not victory(board):
+        try:
+            print_board(board)
+            move = player()
+            board = possible_steps(board,move)
+        except IndexError as e:
+            print(e)
+    print('Game is finished!')
+         
+main()
